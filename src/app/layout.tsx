@@ -1,27 +1,30 @@
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import "./globals.css";
-import { AuthProvider } from "@/lib/context/AuthContext";
+import './globals.css'
+import type { Metadata } from 'next'
+import { Inter } from 'next/font/google'
+import { ThemeProvider } from '@/contexts/ThemeContext'
+import { AuthProvider } from '@/lib/context/AuthContext'
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: "SIRAMS - Sistem Informasi RAMS",
-  description: "Sistem Informasi RAMS untuk manajemen proyek dan tugas",
-};
+  title: 'Sirams - Project Management System',
+  description: 'A comprehensive project management system for tracking tasks and projects',
+}
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: {
+  children: React.ReactNode
+}) {
   return (
     <html lang="en">
       <body className={inter.className}>
         <AuthProvider>
-          {children}
+          <ThemeProvider>
+            {children}
+          </ThemeProvider>
         </AuthProvider>
       </body>
     </html>
-  );
+  )
 }
