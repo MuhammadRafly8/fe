@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import Sidebar from '@/components/layout/Sidebar';
-import { getUserById, updateUser, UpdateUserData } from '@/lib/api/userService';
+import { getUser, updateUser, UpdateUserData } from '@/lib/api/userService';
 import { AxiosError } from 'axios';
 
 interface ApiErrorResponse {
@@ -38,7 +38,7 @@ export default function EditUser() {
           return;
         }
         
-        const userData = await getUserById(parseInt(id));
+        const userData = await getUser(parseInt(id, 10));
         setFormData({
           name: userData.name || '',
           email: userData.email || '',
@@ -56,7 +56,7 @@ export default function EditUser() {
     };
 
     fetchUser();
-  }, [params]);
+  }, [params.id]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -94,12 +94,12 @@ export default function EditUser() {
       // Log the data being sent for debugging
       console.log('Submitting user data:', dataToSubmit);
       
-      await updateUser(parseInt(id), dataToSubmit);
+      await updateUser(parseInt(id, 10), dataToSubmit);
       router.push('/users');
     } catch (err) {
       const axiosError = err as AxiosError<ApiErrorResponse>;
       console.error('Update error:', axiosError.response?.data);
-      setError(axiosError.response?.data?.message || 'Failed to update user');
+      setError(axiosError.response && axiosError.response.data && axiosError.response.data.message ? axiosError.response.data.message : 'Failed to update user');
     } finally {
       setSaving(false);
     }

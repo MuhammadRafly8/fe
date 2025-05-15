@@ -33,6 +33,58 @@ export default function EditProject() {
     progress: 0
   });
 
+  // Add the handleUserSelect function inside the component
+  const handleUserSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    console.log(`Selected ${name} with value: ${value}`); // Debug log
+    
+    // Find the selected user
+    let selectedUser;
+    if (name === 'tech_name') {
+      selectedUser = techUsers.find(user => user.name === value);
+      console.log('Found tech user:', selectedUser); // Debug log
+    } else if (name === 'admin_name') {
+      selectedUser = adminUsers.find(user => user.name === value);
+      console.log('Found admin user:', selectedUser); // Debug log
+    }
+    
+    // Update form data with user details
+    if (selectedUser) {
+      if (name === 'tech_name') {
+        setFormData(prev => ({
+          ...prev,
+          tech_name: selectedUser.name,
+          tech_email: selectedUser.email || '',
+          tech_phone: selectedUser.phone || ''
+        }));
+      } else if (name === 'admin_name') {
+        setFormData(prev => ({
+          ...prev,
+          admin_name: selectedUser.name,
+          admin_email: selectedUser.email || '',
+          admin_phone: selectedUser.phone || ''
+        }));
+      }
+    } else {
+      // If "Select..." option is chosen, clear the fields
+      if (name === 'tech_name') {
+        setFormData(prev => ({
+          ...prev,
+          tech_name: '',
+          tech_email: '',
+          tech_phone: ''
+        }));
+      } else if (name === 'admin_name') {
+        setFormData(prev => ({
+          ...prev,
+          admin_name: '',
+          admin_email: '',
+          admin_phone: ''
+        }));
+      }
+    }
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -44,11 +96,15 @@ export default function EditProject() {
         
         // Fetch users for dropdowns
         const users = await getUsers();
-        const admins = users.filter(user => user.role === 'admin');
-        const techs = users.filter(user => user.role === 'technician');
         
-        setAdminUsers(admins);
-        setTechUsers(techs);
+        console.log('Raw users from database:', users);
+        
+        // Set all users for both dropdowns
+        setAdminUsers(users);
+        setTechUsers(users);
+        
+        console.log('After setting - adminUsers:', users);
+        console.log('After setting - techUsers:', users);
         
         // Set form data from project
         setFormData({
@@ -250,20 +306,17 @@ export default function EditProject() {
                 id="tech_name"
                 name="tech_name"
                 value={formData.tech_name}
-                onChange={handleChange}
+                onChange={handleUserSelect}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md"
               >
                 <option value="">Select Technical Contact</option>
-                {techUsers.length > 0 ? (
-                  techUsers.map(user => (
-                    <option key={user.id} value={user.name}>{user.name}</option>
-                  ))
-                ) : (
-                  <option value="Tech User">Tech User</option>
-                )}
+                {adminUsers.map(user => (
+                  <option key={user.id} value={user.name}>{user.name}</option>
+                ))}
               </select>
             </div>
             
+            {/* Rest of the technical contact section */}
             <div className="mb-4">
               <label htmlFor="tech_email" className="block text-sm font-medium text-gray-700 mb-1">
                 Email
@@ -276,6 +329,7 @@ export default function EditProject() {
                 onChange={handleChange}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md"
                 placeholder="Enter technical contact email"
+                readOnly
               />
             </div>
             
@@ -291,6 +345,7 @@ export default function EditProject() {
                 onChange={handleChange}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md"
                 placeholder="Enter technical contact phone"
+                readOnly
               />
             </div>
           </div>
@@ -307,7 +362,7 @@ export default function EditProject() {
                 id="admin_name"
                 name="admin_name"
                 value={formData.admin_name}
-                onChange={handleChange}
+                onChange={handleUserSelect}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md"
               >
                 <option value="">Select Admin Contact</option>
@@ -333,6 +388,7 @@ export default function EditProject() {
                 onChange={handleChange}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md"
                 placeholder="Enter admin contact email"
+                readOnly
               />
             </div>
             
@@ -348,6 +404,7 @@ export default function EditProject() {
                 onChange={handleChange}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md"
                 placeholder="Enter admin contact phone"
+                readOnly
               />
             </div>
           </div>
