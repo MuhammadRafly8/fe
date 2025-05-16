@@ -58,7 +58,12 @@ export default function Sidebar() {
           Projects
         </Link>
         
-        {/* Continue with other links */}
+        <Link href="/meeting-schedule" className={`flex items-center px-4 py-2 ${isActive('/meeting-schedule') ? 'bg-blue-500 text-white' : 'hover:bg-gray-100 dark:hover:bg-gray-700'}`}>
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2v-5a2 2 0 00-2-2H5a2 2 0 00-2 2v5a2 2 0 002 2z" />
+          </svg>
+          Meeting Schedule
+        </Link>
       </div>
     </div>
   );
