@@ -2,9 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { use } from 'react';
 import Sidebar from '@/components/layout/Sidebar';
-import { getUserById, User } from '@/lib/api/userService';
+import { getUser, User } from '@/lib/api/userService';
 
 export default function ViewUser({ params }: { params: { id: string } }) {
   const router = useRouter();
@@ -12,13 +11,12 @@ export default function ViewUser({ params }: { params: { id: string } }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Unwrap the params.id using React.use()
-  const userId = use(Promise.resolve(params.id));
+  const userId = params.id;
 
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const userData = await getUserById(parseInt(userId));
+        const userData = await getUser(parseInt(userId));
         setUser(userData);
       } catch (err) {
         const fetchError = err as Error;

@@ -76,10 +76,15 @@ export default function CreateProject() {
         end_date: formData.end_date
       };
   
-      await createProject(projectData);
+      // Add loading state or disable button here if needed
+      
+      const response = await createProject(projectData);
+      console.log('Project created successfully:', response);
       router.push('/projects');
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('Error creating project:', error);
+      // Show error to user
+      alert(`Failed to create project: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
   };
 

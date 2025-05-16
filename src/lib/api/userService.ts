@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { getAuthToken } from './authService';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
 
@@ -30,22 +31,14 @@ export interface UpdateUserData {
   phone?: string;
 }
 
-// Mock data to use when API fails
-const mockUsers: User[] = [
-  { id: 1, name: 'Admin User', email: 'admin@example.com', role: 'admin' },
-  { id: 2, name: 'Project Manager', email: 'pm@example.com', role: 'admin' },
-  { id: 3, name: 'Tech User', email: 'tech@example.com', role: 'technician' },
-  { id: 4, name: 'Developer', email: 'dev@example.com', role: 'technician' }
-];
-
 export const getUsers = async (): Promise<User[]> => {
   try {
     console.log('Fetching users from:', `${API_URL}/users`);
-    const token = localStorage.getItem('token');
+    const token = await getAuthToken();
     
     if (!token) {
       console.warn('No authentication token found');
-      return mockUsers;
+      return [];
     }
     
     const response = await axios.get(`${API_URL}/users`, {
@@ -58,20 +51,17 @@ export const getUsers = async (): Promise<User[]> => {
     return response.data;
   } catch (error) {
     console.error('Error fetching users:', error);
-    // Return mock data on error
-    return mockUsers;
+    return [];
   }
 };
 
-export const getUserById = async (id: number): Promise<User> => {
+export const getUser = async (id: number): Promise<User> => {
   try {
-    const token = localStorage.getItem('token');
+    const token = await getAuthToken();
     
     if (!token) {
       console.warn('No authentication token found');
-      const mockUser = mockUsers.find(user => user.id === id);
-      if (mockUser) return mockUser;
-      throw new Error('User not found and no token available');
+      throw new Error('Authentication required');
     }
     
     const response = await axios.get(`${API_URL}/users/${id}`, {
@@ -84,9 +74,6 @@ export const getUserById = async (id: number): Promise<User> => {
     return response.data;
   } catch (error) {
     console.error(`Error fetching user with ID ${id}:`, error);
-    // Return a mock user if the real one can't be fetched
-    const mockUser = mockUsers.find(user => user.id === id);
-    if (mockUser) return mockUser;
     throw error;
   }
 };
@@ -137,12 +124,12 @@ export const updateUser = async (id: number, userData: UpdateUserData): Promise<
   }
 };
 
+// In your deleteUser function, replace the direct localStorage.getItem with getAuthToken
 export const deleteUser = async (id: number): Promise<void> => {
   try {
-    const token = localStorage.getItem('token');
+    const token = await getAuthToken();
     
     if (!token) {
-      console.warn('No authentication token found');
       throw new Error('Authentication required');
     }
     
