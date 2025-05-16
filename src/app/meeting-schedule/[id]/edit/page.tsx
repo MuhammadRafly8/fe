@@ -203,15 +203,15 @@ export default function EditMeetingSchedulePage({ params }: EditMeetingScheduleP
   };
 
   if (loading) return <p>Loading...</p>;
-  if (error) return <p className="text-red-600">{error}</p>;
+  if (error) return <p className="text-red-600 dark:text-red-400">{error}</p>;
 
   return (
-    <div className="p-8 max-w-3xl mx-auto bg-white rounded shadow">
-      <h1 className="text-2xl font-bold mb-6">Edit Meeting Schedule</h1>
-      {updateError && <p className="mb-4 text-red-600">{updateError}</p>}
+    <div className="p-8 max-w-3xl mx-auto bg-white dark:bg-gray-800 rounded shadow">
+      <h1 className="text-2xl font-bold mb-6 text-gray-900 dark:text-white">Edit Meeting Schedule</h1>
+      {updateError && <p className="mb-4 text-red-600 dark:text-red-400">{updateError}</p>}
       <form onSubmit={(e) => { e.preventDefault(); handleSave(); }} className="space-y-6">
         <div>
-          <label htmlFor="title" className="block mb-1 font-medium">Meeting Title</label>
+          <label htmlFor="title" className="block mb-1 font-medium text-gray-900 dark:text-white">Meeting Title</label>
           <input
             id="title"
             type="text"
@@ -219,22 +219,22 @@ export default function EditMeetingSchedulePage({ params }: EditMeetingScheduleP
             value={meeting.title}
             onChange={handleChange}
             required
-            className="w-full px-3 py-2 border border-gray-300 rounded"
+            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
           />
         </div>
         <div>
-          <label htmlFor="description" className="block mb-1 font-medium">Meeting Description</label>
+          <label htmlFor="description" className="block mb-1 font-medium text-gray-900 dark:text-white">Meeting Description</label>
           <textarea
             id="description"
             name="description"
             value={meeting.description}
             onChange={handleChange}
             rows={4}
-            className="w-full px-3 py-2 border border-gray-300 rounded"
+            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
           />
         </div>
         <div>
-          <label htmlFor="member" className="block mb-1 font-medium">Members</label>
+          <label htmlFor="member" className="block mb-1 font-medium text-gray-900 dark:text-white">Members</label>
           <Select
             id="member"
             isMulti
@@ -246,7 +246,7 @@ export default function EditMeetingSchedulePage({ params }: EditMeetingScheduleP
           />
         </div>
         <div>
-          <label htmlFor="platform" className="block mb-1 font-medium">Meeting Platform</label>
+          <label htmlFor="platform" className="block mb-1 font-medium text-gray-900 dark:text-white">Meeting Platform</label>
           <Select
             id="platform"
             options={platformOptions}
@@ -260,7 +260,7 @@ export default function EditMeetingSchedulePage({ params }: EditMeetingScheduleP
           />
         </div>
         <div>
-          <label htmlFor="startDate" className="block mb-1 font-medium">Start Date</label>
+          <label htmlFor="startDate" className="block mb-1 font-medium text-gray-900 dark:text-white">Start Date</label>
           <input
             id="startDate"
             type="datetime-local"
@@ -268,25 +268,25 @@ export default function EditMeetingSchedulePage({ params }: EditMeetingScheduleP
             value={meeting.startDate}
             onChange={handleChange}
             required
-            className="w-full px-3 py-2 border border-gray-300 rounded"
+            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
           />
         </div>
         <div>
-          <label htmlFor="endDate" className="block mb-1 font-medium">End Date</label>
+          <label htmlFor="endDate" className="block mb-1 font-medium text-gray-900 dark:text-white">End Date</label>
           <input
             id="endDate"
             type="datetime-local"
             name="endDate"
             value={meeting.endDate}
             onChange={handleChange}
-            className="w-full px-3 py-2 border border-gray-300 rounded"
+            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
           />
         </div>
         <div className="flex justify-end space-x-4">
           <button
             type="button"
             onClick={() => router.push('/meeting-schedule')}
-            className="px-4 py-2 border border-gray-300 rounded"
+            className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded text-gray-900 dark:text-white"
           >
             Cancel
           </button>
